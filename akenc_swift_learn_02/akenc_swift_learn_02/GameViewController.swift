@@ -16,7 +16,9 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         // create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+//        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+
+        let scene = SCNScene()
         
         // create and add a camera to the scene
         let cameraNode = SCNNode()
@@ -24,13 +26,13 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+        cameraNode.position = SCNVector3(x: 0, y: 0, z: 35)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light!.type = SCNLightTypeOmni
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
+        lightNode.position = SCNVector3(x: 0, y: 10, z: 20)
         scene.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
@@ -39,12 +41,12 @@ class GameViewController: UIViewController {
         ambientLightNode.light!.type = SCNLightTypeAmbient
         ambientLightNode.light!.color = UIColor.darkGrayColor()
         scene.rootNode.addChildNode(ambientLightNode)
-        
-        // retrieve the ship node
-        let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
-        
-        // animate the 3d object
-        ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
+//        
+//        // retrieve the ship node
+//        let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
+//        
+//        // animate the 3d object
+//        ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
         
         // retrieve the SCNView
         let scnView = self.view as! SCNView
@@ -61,9 +63,26 @@ class GameViewController: UIViewController {
         // configure the view
         scnView.backgroundColor = UIColor.blackColor()
         
+        
+        makeTree(scene.rootNode)
+        
+        
+        
+        scnView.autoenablesDefaultLighting = true
         // add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
         scnView.addGestureRecognizer(tapGesture)
+    }
+    
+    func makeTree(rootNode:SCNNode){
+        for(var x = 0;x<100;x=x+10) {
+            for(var z = 0;z<100;z=z+10){
+                let tree = ChristmasTree()
+                tree.position.x = Float(x)
+                tree.position.z = Float(z)
+                rootNode.addChildNode(tree)
+            }
+        }
     }
     
     func handleTap(gestureRecognize: UIGestureRecognizer) {
